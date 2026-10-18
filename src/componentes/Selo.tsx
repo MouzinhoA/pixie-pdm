@@ -1,6 +1,6 @@
 import { Text, View } from 'react-native';
 
-import type { StatusPedido, StatusProduto } from '@/modelos';
+import type { StatusInteresse, StatusProduto } from '@/modelos';
 
 export type CorSelo = 'lilas' | 'verde' | 'amarelo' | 'vermelho' | 'cinza';
 
@@ -14,16 +14,14 @@ const ESTILOS: Record<CorSelo, { fundo: string; texto: string }> = {
 
 export const COR_STATUS_PRODUTO: Record<StatusProduto, CorSelo> = {
   disponivel: 'verde',
-  pausado: 'amarelo',
+  reservado: 'amarelo',
   vendido: 'cinza',
 };
 
-export const COR_STATUS_PEDIDO: Record<StatusPedido, CorSelo> = {
-  pendente: 'amarelo',
-  pago: 'lilas',
-  enviado: 'lilas',
-  entregue: 'verde',
-  cancelado: 'vermelho',
+export const COR_STATUS_INTERESSE: Record<StatusInteresse, CorSelo> = {
+  aguardando: 'amarelo',
+  negociando: 'verde',
+  encerrado: 'cinza',
 };
 
 // Etiqueta colorida para status e informações curtas
