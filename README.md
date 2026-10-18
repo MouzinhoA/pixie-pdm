@@ -1,56 +1,95 @@
-# Welcome to your Expo app 👋
+<p align="center">
+  <img src="assets/images/logo.png" alt="Pixie" width="220" />
+</p>
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+# Pixie — colecionáveis para o comprador
 
-## Get started
+Aplicativo mobile do **Projeto 1** da disciplina Programação para Dispositivos Móveis (IFPB Campus Esperança, 2026.2).
 
-1. Install dependencies
+O Pixie é um marketplace de **itens colecionáveis** (cartas, action figures, moedas, quadrinhos, vinis...). Esta versão é a do **comprador**: ele explora os itens anunciados pelos vendedores e **demonstra interesse** em comprar ou trocar, enviando uma proposta e uma mensagem ao vendedor. Os dados ficam salvos no próprio celular (SQLite).
 
-   ```bash
-   npm install
-   ```
+> Demonstrar interesse não é comprar: o item continua sendo um anúncio do vendedor. O interesse registra a proposta do comprador e o andamento da negociação.
 
-2. Start the app
+## Funcionalidades
 
-   ```bash
-   npx expo start
-   ```
+| Requisito | Onde está no app |
+| --- | --- |
+| **RF01 — CRUD completo** | **Interesse** (entidade principal): demonstrar interesse em um item, listar, editar (tipo, valor oferecido ou item da troca e mensagem) e cancelar. O status da negociação (aguardando → em negociação → encerrado) muda por um botão de **simulação**, já que quem responde é o vendedor. |
+| **RF02 — Persistência local** | Banco **SQLite** (`expo-sqlite`) no aparelho: interesses, itens e preferência de tema continuam após fechar o app. |
+| **RF03 — Listagem inteligente** | Explorar: busca por título, filtro por categoria e por faixa de preço. Interesses: filtro por status da negociação. |
+| **RF04 — Validação** | Tipo (comprar/trocar) e mensagem obrigatórios; valor oferecido com formato validado; item da troca obrigatório quando o tipo é troca. Os erros aparecem embaixo de cada campo e somem quando o campo é corrigido. |
+| **RF05 — Navegação** | Expo Router: abas Explorar e Interesses, tela de detalhe do item e formulário de interesse. |
+| **RF06 — Feedback** | Confirmação antes de cancelar, mensagens de sucesso e erro, indicadores de carregamento. |
 
-In the output, you'll find options to open the app in a
+**Detalhe do item:** descrição, preço, conservação, dados do vendedor (cidade e reputação) e o espaço **Demonstrar interesse**.
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+**Extras (pontuação bônus):**
+- Tema claro / escuro (botão no topo, salvo no banco)
+- Estatísticas: total de interesses, quantos para comprar, para trocar e em negociação
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+## Tecnologias
 
-## Get a fresh project
+- [React Native](https://reactnative.dev) + [Expo SDK 57](https://docs.expo.dev)
+- [Expo Router](https://docs.expo.dev/router/introduction/) — navegação por arquivos
+- [expo-sqlite](https://docs.expo.dev/versions/latest/sdk/sqlite/) — banco de dados local
+- [NativeWind](https://www.nativewind.dev) (Tailwind CSS) — estilos
+- expo-image
+- TypeScript
 
-When you're ready, run:
+## Como executar
+
+Pré-requisitos: [Node.js](https://nodejs.org) 20+ e o app **Expo Go** no celular Android (ou um emulador Android).
 
 ```bash
-npm run reset-project
+git clone <url-do-repositorio>
+cd pixie-pdm
+npm install
+npx expo start
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+Depois, escaneie o QR Code com o Expo Go ou pressione `a` para abrir no emulador Android.
 
-### Other setup steps
+> Se o celular não conectar ao computador (redes diferentes), use `npx expo start --tunnel`.
+> O app também abre no navegador (tecla `w`), mas o alvo do projeto é Android.
 
-- To set up ESLint for linting, run `npx expo lint`, or follow our guide on ["Using ESLint and Prettier"](https://docs.expo.dev/guides/using-eslint/)
-- If you'd like to set up unit testing, follow our guide on ["Unit Testing with Jest"](https://docs.expo.dev/develop/unit-testing/)
-- Learn more about the TypeScript setup in this template in our guide on ["Using TypeScript"](https://docs.expo.dev/guides/typescript/)
+Outros comandos:
 
-## Learn more
+```bash
+npx expo lint      # verifica o código
+npx tsc --noEmit   # verifica os tipos
+```
 
-To learn more about developing your project with Expo, look at the following resources:
+## Estrutura do projeto
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+```
+src/
+├── app/            # Telas (cada arquivo é uma rota do Expo Router)
+│   ├── (abas)/     # Explorar e Meus interesses
+│   ├── produto/    # [id] = detalhes do item
+│   └── interesse/  # formulario = demonstrar/editar interesse
+├── banco/          # Camada de dados: tabelas e SQL de cada entidade
+├── componentes/    # Componentes visuais reutilizáveis
+├── modelos/        # Tipos das classes do modelo de negócio
+├── tema/           # Cores da marca e tema claro/escuro
+└── utils/          # Formatação, validação, alertas e exportação
+```
 
-## Join the community
+As telas nunca escrevem SQL: elas chamam funções da pasta `banco/` (ex.: `criarInteresse(db, produtoId, dados)`), e as regras de validação ficam em `utils/validacao.ts`.
 
-Join our community of developers creating universal apps.
+## Capturas de tela
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+| Explorar | Detalhe | Formulário (validação) | Interesses | Tema escuro |
+| --- | --- | --- | --- | --- |
+| <img src="docs/prints/explorar.png" width="160" /> | <img src="docs/prints/detalhe.png" width="160" /> | <img src="docs/prints/formulario.png" width="160" /> | <img src="docs/prints/interesses.png" width="160" /> | <img src="docs/prints/escuro.png" width="160" /> |
+
+## Referências
+
+As configurações abaixo seguem a documentação oficial das bibliotecas:
+
+- NativeWind com Expo (`babel.config.js`, `metro.config.js`, `tailwind.config.js`): https://www.nativewind.dev/docs/getting-started/installation
+- expo-sqlite, incluindo a configuração para web (`metro.config.js`): https://docs.expo.dev/versions/v57.0.0/sdk/sqlite/
+- Expo Router (abas e pilha de telas): https://docs.expo.dev/router/introduction/
+
+## Documentação
+
+Veja [docs/documentacao.md](docs/documentacao.md): tema, modelo de dados e justificativa do SQLite.
