@@ -1,18 +1,42 @@
-import { DarkTheme, DefaultTheme, ThemeProvider } from 'expo-router';
-import * as SplashScreen from 'expo-splash-screen';
-import { useColorScheme } from 'react-native';
+import '@/global.css';
 
-import { AnimatedSplashOverlay } from '@/components/animated-icon';
-import AppTabs from '@/components/app-tabs';
+import { Stack, ThemeProvider } from 'expo-router';
+import { SQLiteProvider, useSQLiteContext } from 'expo-sqlite';
+import { StatusBar } from 'expo-status-bar';
+import { useColorScheme } from 'nativewind';
+import { useEffect } from 'react';
 
-SplashScreen.preventAutoHideAsync();
+import { iniciarBanco, NOME_BANCO } from '@/banco/banco';
+import { lerPreferenciaTema } from '@/banco/configuracoes';
+import { useTemaNavegacao } from '@/tema/cores';
 
-export default function TabLayout() {
-  const colorScheme = useColorScheme();
+export default function LayoutRaiz() {
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <AnimatedSplashOverlay />
-      <AppTabs />
+    // Abre o banco SQLite e cria as tabelas antes de mostrar as telas
+    <SQLiteProvider databaseName={NOME_BANCO} onInit={iniciarBanco}>
+      <Navegacao />
+    </SQLiteProvider>
+  );
+}
+
+function Navegacao() {
+  const db = useSQLiteContext();
+  const { setColorScheme } = useColorScheme();
+  const temaNavegacao = useTemaNavegacao();
+
+  // Aplica o tema (claro/escuro) que o usuário escolheu da última vez
+  useEffect(() => {
+    lerPreferenciaTema(db).then(setColorScheme);
+  }, [db, setColorScheme]);
+
+  return (
+    <ThemeProvider value={temaNavegacao}>
+      <StatusBar style="auto" />
+      <Stack screenOptions={{ headerTitleStyle: { fontWeight: 'bold' }, headerBackButtonDisplayMode: 'minimal' }}>
+        <Stack.Screen name="(abas)" options={{ headerShown: false }} />
+        <Stack.Screen name="produto/[id]" options={{ title: 'Detalhes do item' }} />
+        <Stack.Screen name="interesse/formulario" options={{ title: 'Interesse' }} />
+      </Stack>
     </ThemeProvider>
   );
 }
