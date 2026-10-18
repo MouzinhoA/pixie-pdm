@@ -41,7 +41,7 @@ export function useCores() {
 export function useTemaNavegacao() {
   const { colorScheme } = useColorScheme();
   const base = colorScheme === 'dark' ? DarkTheme : DefaultTheme;
-  const cores = colorScheme === 'dark' ? escuro : claro;
+  const cores = useCores();
 
   return {
     ...base,
