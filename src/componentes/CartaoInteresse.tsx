@@ -1,7 +1,7 @@
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { Pressable, Text, View } from 'react-native';
 
-import { ImagemProduto } from '@/componentes/ImagemProduto';
+import { IconeProduto } from '@/componentes/IconeProduto';
 import { COR_STATUS_INTERESSE, Selo } from '@/componentes/Selo';
 import { PROXIMO_STATUS, STATUS_INTERESSE, TIPOS_INTERESSE, type InteresseDetalhado } from '@/modelos';
 import { useCores } from '@/tema/cores';
@@ -23,7 +23,7 @@ export function CartaoInteresse({ interesse, onAbrir, onEditar, onCancelar, onSi
   return (
     <View className="gap-3 rounded-2xl bg-white p-3 dark:bg-roxo">
       <Pressable onPress={onAbrir} className="flex-row gap-3 active:opacity-80">
-        <ImagemProduto uri={interesse.produtoImagens[0]} largura={72} altura={72} />
+        <IconeProduto largura={72} altura={72} />
         <View className="flex-1 gap-1">
           <Text numberOfLines={2} className="text-base font-bold text-roxo dark:text-creme">
             {interesse.produtoTitulo}

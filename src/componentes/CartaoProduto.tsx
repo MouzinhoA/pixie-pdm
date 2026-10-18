@@ -1,6 +1,6 @@
 import { Pressable, Text, View } from 'react-native';
 
-import { ImagemProduto } from '@/componentes/ImagemProduto';
+import { IconeProduto } from '@/componentes/IconeProduto';
 import { COR_STATUS_PRODUTO, Selo } from '@/componentes/Selo';
 import { CONDICOES, STATUS_PRODUTO, type ProdutoDetalhado } from '@/modelos';
 import { formatarPreco } from '@/utils/formatar';
@@ -13,7 +13,7 @@ interface CartaoProdutoProps {
 export function CartaoProduto({ produto, onPress }: CartaoProdutoProps) {
   return (
     <Pressable onPress={onPress} className="flex-row gap-3 rounded-2xl bg-white p-3 active:opacity-80 dark:bg-roxo">
-      <ImagemProduto uri={produto.imagens[0]} largura={92} altura={92} />
+      <IconeProduto largura={92} altura={92} />
 
       <View className="flex-1 justify-between">
         <View className="gap-1">

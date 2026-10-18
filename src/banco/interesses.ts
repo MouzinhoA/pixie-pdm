@@ -10,7 +10,6 @@ const SELECT_INTERESSE = `
   SELECT i.*,
          p.titulo AS produtoTitulo,
          p.preco AS produtoPreco,
-         p.imagens AS produtoImagens,
          c.nome AS categoriaNome,
          u.nome AS vendedorNome,
          u.telefone AS vendedorTelefone
@@ -20,26 +19,15 @@ const SELECT_INTERESSE = `
   JOIN usuarios u ON u.id = p.vendedorId
 `;
 
-type LinhaInteresse = Omit<InteresseDetalhado, 'produtoImagens'> & { produtoImagens: string };
-
-function converterLinha(linha: LinhaInteresse): InteresseDetalhado {
-  return { ...linha, produtoImagens: JSON.parse(linha.produtoImagens) };
-}
-
 // READ: lista os interesses (opcionalmente só de um status), mais recentes primeiro
 export async function listarInteresses(db: SQLiteDatabase, status: StatusInteresse | null = null) {
   const where = status ? 'WHERE i.status = ?' : '';
   const parametros = status ? [status] : [];
-  const linhas = await db.getAllAsync<LinhaInteresse>(
-    `${SELECT_INTERESSE} ${where} ORDER BY i.criadoEm DESC`,
-    parametros
-  );
-  return linhas.map(converterLinha);
+  return db.getAllAsync<InteresseDetalhado>(`${SELECT_INTERESSE} ${where} ORDER BY i.criadoEm DESC`, parametros);
 }
 
 export async function buscarInteresse(db: SQLiteDatabase, id: number) {
-  const linha = await db.getFirstAsync<LinhaInteresse>(`${SELECT_INTERESSE} WHERE i.id = ?`, [id]);
-  return linha ? converterLinha(linha) : null;
+  return db.getFirstAsync<InteresseDetalhado>(`${SELECT_INTERESSE} WHERE i.id = ?`, [id]);
 }
 
 // CREATE: registra o interesse do comprador em um item

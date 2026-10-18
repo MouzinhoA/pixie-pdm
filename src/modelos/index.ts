@@ -23,7 +23,6 @@ export interface Produto {
   titulo: string;
   descricao: string;
   preco: number;
-  imagens: string[];
   condicao: Condicao;
   status: StatusProduto;
   categoriaId: number;
@@ -61,7 +60,6 @@ export interface Interesse {
 export interface InteresseDetalhado extends Interesse {
   produtoTitulo: string;
   produtoPreco: number;
-  produtoImagens: string[];
   categoriaNome: string;
   vendedorNome: string;
   vendedorTelefone: string;

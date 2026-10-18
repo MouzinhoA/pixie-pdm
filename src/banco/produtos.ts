@@ -24,13 +24,6 @@ const SELECT_PRODUTO = `
   LEFT JOIN interesses i ON i.produtoId = p.id
 `;
 
-// No banco a lista de imagens fica salva como texto JSON
-type LinhaProduto = Omit<ProdutoDetalhado, 'imagens'> & { imagens: string };
-
-function converterLinha(linha: LinhaProduto): ProdutoDetalhado {
-  return { ...linha, imagens: JSON.parse(linha.imagens) };
-}
-
 export async function listarProdutos(db: SQLiteDatabase, filtros: FiltrosProduto = {}) {
   const condicoes: string[] = [];
   const parametros: (string | number)[] = [];
@@ -53,14 +46,9 @@ export async function listarProdutos(db: SQLiteDatabase, filtros: FiltrosProduto
   }
 
   const where = condicoes.length > 0 ? `WHERE ${condicoes.join(' AND ')}` : '';
-  const linhas = await db.getAllAsync<LinhaProduto>(
-    `${SELECT_PRODUTO} ${where} ORDER BY p.criadoEm DESC`,
-    parametros
-  );
-  return linhas.map(converterLinha);
+  return db.getAllAsync<ProdutoDetalhado>(`${SELECT_PRODUTO} ${where} ORDER BY p.criadoEm DESC`, parametros);
 }
 
 export async function buscarProduto(db: SQLiteDatabase, id: number) {
-  const linha = await db.getFirstAsync<LinhaProduto>(`${SELECT_PRODUTO} WHERE p.id = ?`, [id]);
-  return linha ? converterLinha(linha) : null;
+  return db.getFirstAsync<ProdutoDetalhado>(`${SELECT_PRODUTO} WHERE p.id = ?`, [id]);
 }

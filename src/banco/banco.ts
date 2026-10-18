@@ -66,7 +66,6 @@ async function criarTabelas(db: SQLiteDatabase) {
       titulo TEXT NOT NULL,
       descricao TEXT NOT NULL,
       preco REAL NOT NULL CHECK (preco > 0),
-      imagens TEXT NOT NULL DEFAULT '[]',
       condicao TEXT NOT NULL,
       status TEXT NOT NULL DEFAULT 'disponivel',
       categoriaId INTEGER NOT NULL REFERENCES categorias(id),
