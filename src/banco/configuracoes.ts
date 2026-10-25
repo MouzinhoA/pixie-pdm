@@ -1,6 +1,5 @@
 import type { SQLiteDatabase } from 'expo-sqlite';
 
-// "system" = segue o tema do celular
 export type PreferenciaTema = 'light' | 'dark' | 'system';
 
 export async function lerPreferenciaTema(db: SQLiteDatabase): Promise<PreferenciaTema> {
@@ -11,6 +10,5 @@ export async function lerPreferenciaTema(db: SQLiteDatabase): Promise<Preferenci
 }
 
 export async function salvarPreferenciaTema(db: SQLiteDatabase, preferencia: PreferenciaTema) {
-  // INSERT OR REPLACE: cria a linha na primeira vez e atualiza nas próximas
   await db.runAsync("INSERT OR REPLACE INTO configuracoes (chave, valor) VALUES ('tema', ?)", [preferencia]);
 }

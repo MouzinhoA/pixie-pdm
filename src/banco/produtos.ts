@@ -5,11 +5,10 @@ import type { ProdutoDetalhado } from '@/modelos';
 export interface FiltrosProduto {
   busca?: string;
   categoriaId?: number | null;
-  precoMinimo?: number; // preço maior que este valor
-  precoMaximo?: number; // preço menor ou igual a este valor
+  precoMinimo?: number;
+  precoMaximo?: number;
 }
 
-// Busca o produto junto com a categoria, o vendedor e o interesse (se existir)
 const SELECT_PRODUTO = `
   SELECT p.*,
          c.nome AS categoriaNome,

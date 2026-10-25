@@ -2,10 +2,8 @@ import type { SQLiteDatabase } from 'expo-sqlite';
 
 import type { Interesse, InteresseDetalhado, StatusInteresse } from '@/modelos';
 
-// Campos que o comprador preenche no formulário (o status é do vendedor)
 export type DadosInteresse = Pick<Interesse, 'tipo' | 'valorOferecido' | 'itemTroca' | 'mensagem'>;
 
-// Busca o interesse junto com os dados do produto, da categoria e do vendedor
 const SELECT_INTERESSE = `
   SELECT i.*,
          p.titulo AS produtoTitulo,
@@ -19,7 +17,6 @@ const SELECT_INTERESSE = `
   JOIN usuarios u ON u.id = p.vendedorId
 `;
 
-// READ: lista os interesses (opcionalmente só de um status), mais recentes primeiro
 export async function listarInteresses(db: SQLiteDatabase, status: StatusInteresse | null = null) {
   const where = status ? 'WHERE i.status = ?' : '';
   const parametros = status ? [status] : [];
@@ -30,7 +27,6 @@ export async function buscarInteresse(db: SQLiteDatabase, id: number) {
   return db.getFirstAsync<InteresseDetalhado>(`${SELECT_INTERESSE} WHERE i.id = ?`, [id]);
 }
 
-// CREATE: registra o interesse do comprador em um item
 export async function criarInteresse(db: SQLiteDatabase, produtoId: number, dados: DadosInteresse) {
   const existente = await db.getFirstAsync<{ id: number }>('SELECT id FROM interesses WHERE produtoId = ?', [
     produtoId,
@@ -47,7 +43,6 @@ export async function criarInteresse(db: SQLiteDatabase, produtoId: number, dado
   return resultado.lastInsertRowId;
 }
 
-// UPDATE: o comprador altera a proposta ou a mensagem
 export async function atualizarInteresse(db: SQLiteDatabase, id: number, dados: DadosInteresse) {
   await db.runAsync(
     'UPDATE interesses SET tipo = ?, valorOferecido = ?, itemTroca = ?, mensagem = ? WHERE id = ?',
@@ -55,12 +50,10 @@ export async function atualizarInteresse(db: SQLiteDatabase, id: number, dados: 
   );
 }
 
-// SIMULAÇÃO: muda o status como se o vendedor tivesse respondido
 export async function atualizarStatusInteresse(db: SQLiteDatabase, id: number, status: StatusInteresse) {
   await db.runAsync('UPDATE interesses SET status = ? WHERE id = ?', [status, id]);
 }
 
-// DELETE: cancela o interesse (o produto continua anunciado pelo vendedor)
 export async function excluirInteresse(db: SQLiteDatabase, id: number) {
   await db.runAsync('DELETE FROM interesses WHERE id = ?', [id]);
 }
@@ -72,7 +65,6 @@ export interface ResumoInteresses {
   negociando: number;
 }
 
-// Estatísticas exibidas no topo da tela de interesses (calculadas pelo SQLite)
 export async function buscarResumoInteresses(db: SQLiteDatabase): Promise<ResumoInteresses> {
   const resumo = await db.getFirstAsync<ResumoInteresses>(`
     SELECT COUNT(*) AS total,
