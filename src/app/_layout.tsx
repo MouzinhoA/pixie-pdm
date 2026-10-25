@@ -12,7 +12,6 @@ import { useTemaNavegacao } from '@/tema/cores';
 
 export default function LayoutRaiz() {
   return (
-    // Abre o banco SQLite e cria as tabelas antes de mostrar as telas
     <SQLiteProvider databaseName={NOME_BANCO} onInit={iniciarBanco}>
       <Navegacao />
     </SQLiteProvider>
@@ -24,7 +23,6 @@ function Navegacao() {
   const { setColorScheme } = useColorScheme();
   const temaNavegacao = useTemaNavegacao();
 
-  // Aplica o tema (claro/escuro) que o usuário escolheu da última vez
   useEffect(() => {
     lerPreferenciaTema(db).then(setColorScheme);
   }, [db, setColorScheme]);

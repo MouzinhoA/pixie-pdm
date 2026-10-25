@@ -1,12 +1,9 @@
-// Classes do modelo de negócio do Pixie (app do comprador)
-
-// Vendedor que anuncia os itens (classe Usuario do diagrama)
 export interface Usuario {
   id: number;
   nome: string;
   cidade: string;
   telefone: string;
-  reputacao: number; // nota média de 0 a 5
+  reputacao: number;
 }
 
 export interface Categoria {
@@ -17,7 +14,6 @@ export interface Categoria {
 export type Condicao = 'lacrado' | 'novo' | 'usado' | 'com_avarias';
 export type StatusProduto = 'disponivel' | 'reservado' | 'vendido';
 
-// Item colecionável anunciado por um vendedor
 export interface Produto {
   id: number;
   titulo: string;
@@ -27,36 +23,33 @@ export interface Produto {
   status: StatusProduto;
   categoriaId: number;
   vendedorId: number;
-  criadoEm: string; // data em formato ISO
+  criadoEm: string; 
 }
 
-// Produto junto com dados das tabelas relacionadas, usado nas telas
 export interface ProdutoDetalhado extends Produto {
   categoriaNome: string;
   vendedorNome: string;
   vendedorCidade: string;
   vendedorTelefone: string;
   vendedorReputacao: number;
-  interesseId: number | null; // preenchido quando o comprador já demonstrou interesse
+  interesseId: number | null; 
 }
 
 export type TipoInteresse = 'compra' | 'troca';
 export type StatusInteresse = 'aguardando' | 'negociando' | 'encerrado';
 
-// Entidade principal do CRUD: o interesse do comprador em comprar ou trocar um item.
-// Demonstrar interesse não é comprar: o item continua sendo do vendedor.
+
 export interface Interesse {
   id: number;
   produtoId: number;
   tipo: TipoInteresse;
-  valorOferecido: number | null; // só para compra (opcional)
-  itemTroca: string; // só para troca: o que o comprador oferece
-  mensagem: string; // recado para o vendedor
+  valorOferecido: number | null; 
+  itemTroca: string; 
+  mensagem: string; 
   status: StatusInteresse;
-  criadoEm: string; // data em formato ISO
+  criadoEm: string;
 }
 
-// Interesse junto com os dados do produto, usado nas telas
 export interface InteresseDetalhado extends Interesse {
   produtoTitulo: string;
   produtoPreco: number;
@@ -65,7 +58,6 @@ export interface InteresseDetalhado extends Interesse {
   vendedorTelefone: string;
 }
 
-// Textos exibidos nas telas para cada valor
 export const CONDICOES: Record<Condicao, string> = {
   lacrado: 'Lacrado',
   novo: 'Novo',
@@ -90,7 +82,6 @@ export const STATUS_INTERESSE: Record<StatusInteresse, string> = {
   encerrado: 'Encerrado',
 };
 
-// Próxima etapa da negociação (quem muda é o vendedor; no app, isso é simulado)
 export const PROXIMO_STATUS: Record<StatusInteresse, StatusInteresse | null> = {
   aguardando: 'negociando',
   negociando: 'encerrado',

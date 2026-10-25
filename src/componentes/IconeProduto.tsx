@@ -9,7 +9,6 @@ interface IconeProdutoProps {
   arredondada?: boolean;
 }
 
-// Ilustração do item nas listas e no detalhe (o app não trabalha com fotos)
 export function IconeProduto({ largura, altura, arredondada = true }: IconeProdutoProps) {
   const estilo = { width: largura, height: altura, borderRadius: arredondada ? 14 : 0 };
 

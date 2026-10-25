@@ -6,7 +6,6 @@ interface CartaoProps {
   children: ReactNode;
 }
 
-// Caixa branca com cantos arredondados que agrupa conteúdo
 export function Cartao({ titulo, children }: CartaoProps) {
   return (
     <View className="gap-3 rounded-2xl bg-white p-4 dark:bg-roxo">

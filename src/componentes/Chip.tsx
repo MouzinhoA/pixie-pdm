@@ -6,7 +6,6 @@ interface ChipProps {
   onPress: () => void;
 }
 
-// Botão pequeno e arredondado, usado em filtros e opções
 export function Chip({ rotulo, selecionado, onPress }: ChipProps) {
   return (
     <Pressable

@@ -6,7 +6,6 @@ import { Pressable } from 'react-native';
 import { salvarPreferenciaTema } from '@/banco/configuracoes';
 import { useCores } from '@/tema/cores';
 
-// Botão do cabeçalho que alterna entre tema claro e escuro (e salva a escolha)
 export function BotaoTema() {
   const db = useSQLiteContext();
   const cores = useCores();

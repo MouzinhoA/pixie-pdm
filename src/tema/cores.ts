@@ -1,9 +1,6 @@
 import { DarkTheme, DefaultTheme } from 'expo-router';
 import { useColorScheme } from 'nativewind';
 
-// Cores tiradas da logo do Pixie (manter igual ao tailwind.config.js).
-// Use as classes do Tailwind sempre que possível; estas constantes são
-// para lugares que não aceitam className (ícones, abas, cabeçalhos...).
 export const paleta = {
   roxo: '#221272',
   roxoClaro: '#3A2C8F',
@@ -37,7 +34,6 @@ export function useCores() {
   return colorScheme === 'dark' ? escuro : claro;
 }
 
-// Tema usado pelos cabeçalhos e pela barra de abas
 export function useTemaNavegacao() {
   const { colorScheme } = useColorScheme();
   const base = colorScheme === 'dark' ? DarkTheme : DefaultTheme;

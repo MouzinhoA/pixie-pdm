@@ -3,7 +3,6 @@ import { View } from 'react-native';
 
 import { paleta } from '@/tema/cores';
 
-// Mostra uma nota de 0 a 5 em estrelas (inteiras e meias)
 export function Estrelas({ nota, tamanho = 16 }: { nota: number; tamanho?: number }) {
   return (
     <View className="flex-row gap-1">

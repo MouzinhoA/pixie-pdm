@@ -19,7 +19,6 @@ import { temErros, validarInteresse, type Erros, type FormularioInteresse } from
 
 const LISTA_TIPOS = Object.keys(TIPOS_INTERESSE) as TipoInteresse[];
 
-// Mesma tela para criar (recebe produtoId) e editar (recebe id do interesse)
 export default function TelaFormularioInteresse() {
   const { id, produtoId } = useLocalSearchParams<{ id?: string; produtoId?: string }>();
   const editando = Boolean(id);
@@ -35,12 +34,9 @@ export default function TelaFormularioInteresse() {
   const [carregando, setCarregando] = useState(true);
   const [salvando, setSalvando] = useState(false);
 
-  // Validação dinâmica: depois da primeira tentativa de salvar, os erros são
-  // recalculados a cada alteração e somem assim que o campo é corrigido
   const formulario = { tipo, valorOferecido, itemTroca, mensagem };
   const erros: Erros<FormularioInteresse> = tentouSalvar ? validarInteresse(formulario) : {};
 
-  // Carrega o produto e, se estiver editando, os dados do interesse
   useEffect(() => {
     async function carregar() {
       try {
@@ -75,7 +71,6 @@ export default function TelaFormularioInteresse() {
 
     setSalvando(true);
     try {
-      // Guarda só o campo que faz sentido para o tipo escolhido
       const dados: DadosInteresse = {
         tipo,
         valorOferecido: tipo === 'compra' && valorOferecido.trim() ? textoParaPreco(valorOferecido) : null,
@@ -174,7 +169,6 @@ export default function TelaFormularioInteresse() {
   );
 }
 
-// Grupo de chips com título e mensagem de erro
 function Opcoes({ titulo, erro, children }: { titulo: string; erro?: string; children: ReactNode }) {
   return (
     <View className="gap-2">

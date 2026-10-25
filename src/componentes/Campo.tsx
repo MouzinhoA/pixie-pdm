@@ -7,7 +7,6 @@ interface CampoProps extends TextInputProps {
   erro?: string;
 }
 
-// Caixa de texto com rótulo e mensagem de erro de validação
 export function Campo({ rotulo, erro, multiline, ...props }: CampoProps) {
   const cores = useCores();
 

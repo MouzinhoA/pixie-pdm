@@ -13,14 +13,12 @@ import type { Categoria, ProdutoDetalhado } from '@/modelos';
 import { useCores } from '@/tema/cores';
 import { avisar } from '@/utils/alertas';
 
-// Faixas do filtro de preço (mínimo não incluso, máximo incluso)
 const FAIXAS_PRECO: { rotulo: string; minimo?: number; maximo?: number }[] = [
   { rotulo: 'Até R$ 100', maximo: 100 },
   { rotulo: 'R$ 100 a R$ 500', minimo: 100, maximo: 500 },
   { rotulo: 'Acima de R$ 500', minimo: 500 },
 ];
 
-// Vitrine: itens anunciados pelos vendedores, com busca e filtros
 export default function TelaExplorar() {
   const db = useSQLiteContext();
   const cores = useCores();
@@ -29,13 +27,12 @@ export default function TelaExplorar() {
   const [categorias, setCategorias] = useState<Categoria[]>([]);
   const [busca, setBusca] = useState('');
   const [categoriaId, setCategoriaId] = useState<number | null>(null);
-  const [faixaPreco, setFaixaPreco] = useState<number | null>(null); // posição em FAIXAS_PRECO
+  const [faixaPreco, setFaixaPreco] = useState<number | null>(null);
   const [carregando, setCarregando] = useState(true);
 
-  // Recarrega sempre que a tela aparece ou quando um filtro muda
   useFocusEffect(
     useCallback(() => {
-      let ativo = true; // evita mostrar o resultado de uma busca antiga
+      let ativo = true;
       const faixa = faixaPreco === null ? undefined : FAIXAS_PRECO[faixaPreco];
 
       async function carregar() {

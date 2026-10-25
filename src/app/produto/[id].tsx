@@ -26,7 +26,6 @@ export default function TelaDetalheProduto() {
   const [produto, setProduto] = useState<ProdutoDetalhado | null>(null);
   const [carregando, setCarregando] = useState(true);
 
-  // Recarrega ao voltar do formulário de interesse
   useFocusEffect(
     useCallback(() => {
       buscarProduto(db, Number(id))
@@ -82,7 +81,6 @@ export default function TelaDetalheProduto() {
           </View>
         </Cartao>
 
-        {/* Espaço para demonstrar interesse (criar), ou editar/cancelar se já existir */}
         <Cartao titulo="Interesse">
           {interesseId !== null ? (
             <View className="gap-3">

@@ -9,10 +9,10 @@ import { formatarData, formatarPreco } from '@/utils/formatar';
 
 interface CartaoInteresseProps {
   interesse: InteresseDetalhado;
-  onAbrir: () => void; // abre os detalhes do produto
+  onAbrir: () => void; 
   onEditar: () => void;
   onCancelar: () => void;
-  onSimularResposta: () => void; // simula o vendedor avançando a negociação
+  onSimularResposta: () => void; 
 }
 
 export function CartaoInteresse({ interesse, onAbrir, onEditar, onCancelar, onSimularResposta }: CartaoInteresseProps) {
@@ -38,7 +38,6 @@ export function CartaoInteresse({ interesse, onAbrir, onEditar, onCancelar, onSi
         </View>
       </Pressable>
 
-      {/* Proposta e mensagem enviadas ao vendedor */}
       <View className="gap-1 rounded-xl bg-creme p-3 dark:bg-roxo-claro">
         {interesse.tipo === 'compra' && interesse.valorOferecido !== null && (
           <Text className="text-sm font-semibold text-roxo dark:text-creme">
@@ -54,7 +53,6 @@ export function CartaoInteresse({ interesse, onAbrir, onEditar, onCancelar, onSi
         <Text className="text-xs text-suave dark:text-lilas-claro">Enviado em {formatarData(interesse.criadoEm)}</Text>
       </View>
 
-      {/* O vendedor não usa este app, então a resposta dele é simulada aqui */}
       {proximoStatus && (
         <View className="gap-2 rounded-xl border border-dashed border-lilas p-3">
           <Text className="text-xs font-semibold uppercase text-suave dark:text-lilas-claro">Simulação</Text>

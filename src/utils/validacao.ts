@@ -1,8 +1,6 @@
 import type { TipoInteresse } from '@/modelos';
 import { textoParaPreco } from '@/utils/formatar';
 
-// A validação recebe os valores do formulário e devolve um objeto
-// { campo: 'mensagem de erro' }. Objeto vazio = formulário válido.
 export type Erros<T> = Partial<Record<keyof T, string>>;
 
 export function temErros<T>(erros: Erros<T>) {
@@ -24,13 +22,11 @@ export function validarInteresse(form: FormularioInteresse) {
 
   if (!form.tipo) erros.tipo = 'Escolha se quer comprar ou trocar.';
 
-  // Compra: o valor oferecido é opcional, mas se preenchido precisa ser válido
   if (form.tipo === 'compra' && valor) {
     if (!/^\d{1,7}([.,]\d{1,2})?$/.test(valor)) erros.valorOferecido = 'Formato inválido. Exemplo: 149,90';
     else if (textoParaPreco(valor) <= 0) erros.valorOferecido = 'O valor deve ser maior que zero.';
   }
 
-  // Troca: é obrigatório dizer o que será oferecido
   if (form.tipo === 'troca') {
     if (itemTroca.length < 3) erros.itemTroca = 'Diga qual item você oferece na troca.';
     else if (itemTroca.length > 100) erros.itemTroca = 'Use no máximo 100 caracteres.';

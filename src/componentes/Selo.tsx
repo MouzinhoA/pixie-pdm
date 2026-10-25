@@ -24,7 +24,6 @@ export const COR_STATUS_INTERESSE: Record<StatusInteresse, CorSelo> = {
   encerrado: 'cinza',
 };
 
-// Etiqueta colorida para status e informações curtas
 export function Selo({ texto, cor = 'lilas' }: { texto: string; cor?: CorSelo }) {
   const estilo = ESTILOS[cor];
   return (

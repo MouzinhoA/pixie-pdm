@@ -9,7 +9,6 @@ interface EstadoVazioProps {
   mensagem: string;
 }
 
-// Mensagem exibida quando uma lista não tem itens
 export function EstadoVazio({ icone, titulo, mensagem }: EstadoVazioProps) {
   return (
     <View className="items-center gap-2 px-8 py-16">

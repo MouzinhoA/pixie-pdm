@@ -4,8 +4,6 @@ import { excluirInteresse } from '@/banco/interesses';
 import { avisar, confirmar } from '@/utils/alertas';
 import { mensagemDeErro } from '@/utils/formatar';
 
-// Pede confirmação, exclui o interesse e avisa o resultado.
-// Cada tela passa em "depois" o que precisa fazer em seguida (recarregar a lista, atualizar o estado...).
 export function cancelarInteresse(
   db: SQLiteDatabase,
   interesseId: number,

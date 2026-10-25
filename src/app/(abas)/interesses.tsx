@@ -20,7 +20,6 @@ import { mensagemDeErro } from '@/utils/formatar';
 
 const LISTA_STATUS = Object.keys(STATUS_INTERESSE) as StatusInteresse[];
 
-// Interesses que o comprador demonstrou (READ e DELETE do CRUD)
 export default function TelaInteresses() {
   const db = useSQLiteContext();
   const cores = useCores();
@@ -41,14 +40,12 @@ export default function TelaInteresses() {
     }
   }, [db, status]);
 
-  // Recarrega ao abrir a aba e ao voltar do formulário
   useFocusEffect(
     useCallback(() => {
       carregar();
     }, [carregar])
   );
 
-  // Simulação: avança a negociação como se o vendedor tivesse respondido
   async function simularResposta(interesse: InteresseDetalhado) {
     const proximo = PROXIMO_STATUS[interesse.status];
     if (!proximo) return;
