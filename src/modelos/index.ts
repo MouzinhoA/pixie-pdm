@@ -1,11 +1,3 @@
-export interface Usuario {
-  id: number;
-  nome: string;
-  cidade: string;
-  telefone: string;
-  reputacao: number;
-}
-
 export interface Categoria {
   id: number;
   nome: string;

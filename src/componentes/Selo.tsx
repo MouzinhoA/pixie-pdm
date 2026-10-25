@@ -2,13 +2,12 @@ import { Text, View } from 'react-native';
 
 import type { StatusInteresse, StatusProduto } from '@/modelos';
 
-export type CorSelo = 'lilas' | 'verde' | 'amarelo' | 'vermelho' | 'cinza';
+export type CorSelo = 'lilas' | 'verde' | 'amarelo' | 'cinza';
 
 const ESTILOS: Record<CorSelo, { fundo: string; texto: string }> = {
   lilas: { fundo: 'bg-lilas-claro', texto: 'text-roxo' },
   verde: { fundo: 'bg-green-100', texto: 'text-green-800' },
   amarelo: { fundo: 'bg-amber-100', texto: 'text-amber-800' },
-  vermelho: { fundo: 'bg-red-100', texto: 'text-red-800' },
   cinza: { fundo: 'bg-gray-200', texto: 'text-gray-700' },
 };
 
