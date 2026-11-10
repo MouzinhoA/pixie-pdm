@@ -1,25 +1,22 @@
 import { router, useFocusEffect, useLocalSearchParams } from 'expo-router';
-import { useSQLiteContext } from 'expo-sqlite';
 import { useCallback, useState } from 'react';
 import { ScrollView, Text, useWindowDimensions, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { buscarProduto } from '@/banco/produtos';
 import { Botao } from '@/componentes/Botao';
 import { Carregando } from '@/componentes/Carregando';
 import { Cartao } from '@/componentes/Cartao';
 import { EstadoVazio } from '@/componentes/EstadoVazio';
-import { Estrelas } from '@/componentes/Estrelas';
 import { IconeProduto } from '@/componentes/IconeProduto';
 import { COR_STATUS_PRODUTO, Selo } from '@/componentes/Selo';
 import { CONDICOES, STATUS_PRODUTO, type ProdutoDetalhado } from '@/modelos';
+import { buscarProduto } from '@/servicos/produtos';
 import { avisar } from '@/utils/alertas';
 import { cancelarInteresse } from '@/utils/cancelarInteresse';
-import { formatarData, formatarPreco } from '@/utils/formatar';
+import { formatarData, formatarPreco, mensagemDeErro } from '@/utils/formatar';
 
 export default function TelaDetalheProduto() {
   const { id } = useLocalSearchParams<{ id: string }>();
-  const db = useSQLiteContext();
   const { width } = useWindowDimensions();
   const insets = useSafeAreaInsets();
 
@@ -28,11 +25,11 @@ export default function TelaDetalheProduto() {
 
   useFocusEffect(
     useCallback(() => {
-      buscarProduto(db, Number(id))
+      buscarProduto(Number(id))
         .then(setProduto)
-        .catch(() => avisar('Erro', 'Não foi possível carregar o item.'))
+        .catch((erro) => avisar('Erro', mensagemDeErro(erro)))
         .finally(() => setCarregando(false));
-    }, [db, id])
+    }, [id])
   );
 
   if (carregando) return <Carregando />;
@@ -45,14 +42,15 @@ export default function TelaDetalheProduto() {
     );
   }
 
-  const disponivel = produto.status !== 'vendido';
+  const disponivel = produto.status === 'disponivel' && produto.quantidade > 0;
+  const nomeVendedor = produto.vendedorNome ?? 'o vendedor';
   const { interesseId } = produto;
 
   return (
     <ScrollView
       className="flex-1 bg-creme dark:bg-roxo-escuro"
       contentContainerStyle={{ paddingBottom: insets.bottom + 24 }}>
-      <IconeProduto largura={width} altura={220} arredondada={false} />
+      <IconeProduto largura={width} altura={260} arredondada={false} imagem={produto.imagens[0]} />
 
       <View className="gap-4 p-4">
         <View className="gap-2">
@@ -65,20 +63,25 @@ export default function TelaDetalheProduto() {
           <Text className="text-3xl font-extrabold text-roxo dark:text-lilas">{formatarPreco(produto.preco)}</Text>
         </View>
 
+        <Cartao>
+          <View className="flex-row flex-wrap gap-y-4">
+            <Detalhe rotulo="Categoria" valor={produto.categoriaNome} />
+            <Detalhe rotulo="Marca / fabricante" valor={produto.marca?.trim() || 'Não informada'} />
+            <Detalhe rotulo="Conservação" valor={CONDICOES[produto.condicao]} />
+            <Detalhe rotulo="Quantidade" valor={`${produto.quantidade} un.`} />
+            <Detalhe rotulo="Anunciado em" valor={formatarData(produto.criadoEm)} />
+            <Detalhe rotulo="Código" valor={`#${produto.id}`} />
+          </View>
+        </Cartao>
+
         <Cartao titulo="Descrição">
           <Text className="text-base leading-6 text-roxo dark:text-creme">{produto.descricao}</Text>
-          <Text className="text-sm text-suave dark:text-lilas-claro">
-            Conservação: {CONDICOES[produto.condicao]} · Anunciado em {formatarData(produto.criadoEm)}
-          </Text>
         </Cartao>
 
         <Cartao titulo="Vendedor">
-          <Text className="text-base font-semibold text-roxo dark:text-creme">{produto.vendedorNome}</Text>
-          <Text className="text-sm text-suave dark:text-lilas-claro">{produto.vendedorCidade}</Text>
-          <View className="flex-row items-center gap-2">
-            <Estrelas nota={produto.vendedorReputacao} />
-            <Text className="text-sm text-suave dark:text-lilas-claro">{produto.vendedorReputacao.toFixed(1)}</Text>
-          </View>
+          <Text className="text-base font-semibold text-roxo dark:text-creme">
+            {produto.vendedorNome ?? 'Vendedor não informado'}
+          </Text>
         </Cartao>
 
         <Cartao titulo="Interesse">
@@ -97,7 +100,7 @@ export default function TelaDetalheProduto() {
                 icone="close-circle-outline"
                 variante="perigo"
                 onPress={() =>
-                  cancelarInteresse(db, interesseId, produto.titulo, () =>
+                  cancelarInteresse(interesseId, produto.titulo, () =>
                     setProduto((atual) => (atual ? { ...atual, interesseId: null } : atual))
                   )
                 }
@@ -106,7 +109,7 @@ export default function TelaDetalheProduto() {
           ) : disponivel ? (
             <View className="gap-3">
               <Text className="text-sm text-suave dark:text-lilas-claro">
-                Quer comprar ou trocar? Envie uma proposta para {produto.vendedorNome}.
+                Quer comprar ou trocar? Envie uma proposta para {nomeVendedor}.
               </Text>
               <Botao
                 titulo="Demonstrar interesse"
@@ -115,10 +118,21 @@ export default function TelaDetalheProduto() {
               />
             </View>
           ) : (
-            <Text className="text-sm text-suave dark:text-lilas-claro">Este item já foi vendido.</Text>
+            <Text className="text-sm text-suave dark:text-lilas-claro">
+              {produto.status === 'vendido' ? 'Este item já foi vendido.' : 'Este item não está disponível no momento.'}
+            </Text>
           )}
         </Cartao>
       </View>
     </ScrollView>
+  );
+}
+
+function Detalhe({ rotulo, valor }: { rotulo: string; valor: string }) {
+  return (
+    <View className="w-1/2 gap-0.5 pr-2">
+      <Text className="text-xs text-suave dark:text-lilas-claro">{rotulo}</Text>
+      <Text className="text-sm font-semibold text-roxo dark:text-creme">{valor}</Text>
+    </View>
   );
 }

@@ -13,7 +13,7 @@ interface CartaoProdutoProps {
 export function CartaoProduto({ produto, onPress }: CartaoProdutoProps) {
   return (
     <Pressable onPress={onPress} className="flex-row gap-3 rounded-2xl bg-white p-3 active:opacity-80 dark:bg-roxo">
-      <IconeProduto largura={92} altura={92} />
+      <IconeProduto largura={92} altura={92} imagem={produto.imagens[0]} />
 
       <View className="flex-1 justify-between">
         <View className="gap-1">
@@ -22,6 +22,7 @@ export function CartaoProduto({ produto, onPress }: CartaoProdutoProps) {
           </Text>
           <Text numberOfLines={1} className="text-xs text-suave dark:text-lilas-claro">
             {produto.categoriaNome} · {CONDICOES[produto.condicao]}
+            {produto.marca ? ` · ${produto.marca}` : ''}
           </Text>
         </View>
 
