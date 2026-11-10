@@ -1,7 +1,9 @@
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { Image } from 'expo-image';
 import { Tabs } from 'expo-router/js-tabs';
+import { View } from 'react-native';
 
+import { BotaoSair } from '@/componentes/BotaoSair';
 import { BotaoTema } from '@/componentes/BotaoTema';
 import { useCores } from '@/tema/cores';
 
@@ -25,7 +27,12 @@ export default function LayoutAbas() {
         tabBarActiveTintColor: cores.destaque,
         tabBarInactiveTintColor: cores.textoSuave,
         headerTitleStyle: { fontWeight: 'bold' },
-        headerRight: () => <BotaoTema />,
+        headerRight: () => (
+          <View className="flex-row items-center">
+            <BotaoTema />
+            <BotaoSair />
+          </View>
+        ),
       }}>
       <Tabs.Screen
         name="index"

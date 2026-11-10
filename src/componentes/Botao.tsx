@@ -11,6 +11,7 @@ interface BotaoProps {
   variante?: Variante;
   icone?: keyof typeof Ionicons.glyphMap;
   carregando?: boolean;
+  tituloCarregando?: string;
 }
 
 const ESTILOS: Record<Variante, { fundo: string; texto: string }> = {
@@ -18,7 +19,7 @@ const ESTILOS: Record<Variante, { fundo: string; texto: string }> = {
   perigo: { fundo: 'bg-red-600', texto: 'text-white' },
 };
 
-export function Botao({ titulo, onPress, variante = 'primario', icone, carregando }: BotaoProps) {
+export function Botao({ titulo, onPress, variante = 'primario', icone, carregando, tituloCarregando }: BotaoProps) {
   const cores = useCores();
   const estilo = ESTILOS[variante];
   const corConteudo = variante === 'perigo' ? '#FFFFFF' : cores.fundo;
@@ -27,13 +28,17 @@ export function Botao({ titulo, onPress, variante = 'primario', icone, carregand
     <Pressable
       onPress={onPress}
       disabled={carregando}
+      accessibilityRole="button"
+      accessibilityState={{ disabled: carregando, busy: carregando }}
       className={`flex-row items-center justify-center gap-2 rounded-2xl px-5 py-4 active:opacity-80 ${estilo.fundo} ${carregando ? 'opacity-60' : ''}`}>
       {carregando ? (
         <ActivityIndicator color={corConteudo} />
       ) : (
         icone && <Ionicons name={icone} size={20} color={corConteudo} />
       )}
-      <Text className={`text-base font-bold ${estilo.texto}`}>{titulo}</Text>
+      <Text className={`text-base font-bold ${estilo.texto}`}>
+        {carregando && tituloCarregando ? tituloCarregando : titulo}
+      </Text>
     </Pressable>
   );
 }
