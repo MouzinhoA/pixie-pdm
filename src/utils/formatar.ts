@@ -23,3 +23,15 @@ export function textoParaPreco(texto: string) {
 export function mensagemDeErro(erro: unknown) {
   return erro instanceof Error ? erro.message : 'Ocorreu um erro inesperado.';
 }
+
+export function apenasDigitos(texto: string) {
+  return texto.replace(/\D/g, '');
+}
+
+export function formatarCpf(texto: string) {
+  return apenasDigitos(texto)
+    .slice(0, 11)
+    .replace(/(\d{3})(\d)/, '$1.$2')
+    .replace(/(\d{3})(\d)/, '$1.$2')
+    .replace(/(\d{3})(\d{1,2})$/, '$1-$2');
+}
