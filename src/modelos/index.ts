@@ -72,9 +72,3 @@ export const STATUS_INTERESSE: Record<StatusInteresse, string> = {
   negociando: 'Em negociação',
   encerrado: 'Encerrado',
 };
-
-export const PROXIMO_STATUS: Record<StatusInteresse, StatusInteresse | null> = {
-  aguardando: 'negociando',
-  negociando: 'encerrado',
-  encerrado: null,
-};

@@ -2,16 +2,11 @@ import { router, useFocusEffect } from 'expo-router';
 import { useCallback, useState } from 'react';
 import { ActivityIndicator, FlatList, ScrollView, Text, View } from 'react-native';
 
-import {
-  atualizarStatusInteresse,
-  buscarResumoInteresses,
-  listarInteresses,
-  type ResumoInteresses,
-} from '@/servicos/interesses';
+import { buscarResumoInteresses, listarInteresses, type ResumoInteresses } from '@/servicos/interesses';
 import { CartaoInteresse } from '@/componentes/CartaoInteresse';
 import { Chip } from '@/componentes/Chip';
 import { EstadoVazio } from '@/componentes/EstadoVazio';
-import { PROXIMO_STATUS, STATUS_INTERESSE, type InteresseDetalhado, type StatusInteresse } from '@/modelos';
+import { STATUS_INTERESSE, type InteresseDetalhado, type StatusInteresse } from '@/modelos';
 import { useCores } from '@/tema/cores';
 import { avisar } from '@/utils/alertas';
 import { cancelarInteresse } from '@/utils/cancelarInteresse';
@@ -44,18 +39,6 @@ export default function TelaInteresses() {
       carregar();
     }, [carregar])
   );
-
-  async function simularResposta(interesse: InteresseDetalhado) {
-    const proximo = PROXIMO_STATUS[interesse.status];
-    if (!proximo) return;
-    try {
-      await atualizarStatusInteresse(interesse.id, proximo);
-      await carregar();
-      avisar('Simulação', `${interesse.vendedorNome ?? 'O vendedor'} mudou o status para "${STATUS_INTERESSE[proximo]}".`);
-    } catch (erro) {
-      avisar('Erro', mensagemDeErro(erro));
-    }
-  }
 
   const cabecalho = (
     <View className="gap-3 pb-2">
@@ -90,7 +73,6 @@ export default function TelaInteresses() {
             onAbrir={() => router.push(`/produto/${item.produtoId}`)}
             onEditar={() => router.push({ pathname: '/interesse/formulario', params: { id: item.id } })}
             onCancelar={() => cancelarInteresse(item.id, item.produtoTitulo, carregar)}
-            onSimularResposta={() => simularResposta(item)}
           />
         )}
         ListHeaderComponent={cabecalho}

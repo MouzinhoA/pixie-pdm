@@ -92,11 +92,6 @@ export async function atualizarInteresse(id: number, dados: DadosInteresse) {
   if (error) throw traduzirErro(error, 'Não foi possível atualizar o interesse.');
 }
 
-export async function atualizarStatusInteresse(id: number, status: StatusInteresse) {
-  const { error } = await supabase.from('interesses').update({ status }).eq('id', id);
-  if (error) throw traduzirErro(error, 'Não foi possível mudar o status.');
-}
-
 export async function excluirInteresse(id: number) {
   const { error } = await supabase.from('interesses').delete().eq('id', id);
   if (error) throw traduzirErro(error, 'Não foi possível cancelar o interesse.');

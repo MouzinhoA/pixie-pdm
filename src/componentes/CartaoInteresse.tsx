@@ -3,7 +3,7 @@ import { Pressable, Text, View } from 'react-native';
 
 import { IconeProduto } from '@/componentes/IconeProduto';
 import { COR_STATUS_INTERESSE, Selo } from '@/componentes/Selo';
-import { PROXIMO_STATUS, STATUS_INTERESSE, TIPOS_INTERESSE, type InteresseDetalhado } from '@/modelos';
+import { STATUS_INTERESSE, TIPOS_INTERESSE, type InteresseDetalhado } from '@/modelos';
 import { useCores } from '@/tema/cores';
 import { formatarData, formatarPreco } from '@/utils/formatar';
 
@@ -12,12 +12,10 @@ interface CartaoInteresseProps {
   onAbrir: () => void; 
   onEditar: () => void;
   onCancelar: () => void;
-  onSimularResposta: () => void; 
 }
 
-export function CartaoInteresse({ interesse, onAbrir, onEditar, onCancelar, onSimularResposta }: CartaoInteresseProps) {
+export function CartaoInteresse({ interesse, onAbrir, onEditar, onCancelar }: CartaoInteresseProps) {
   const cores = useCores();
-  const proximoStatus = PROXIMO_STATUS[interesse.status];
   const encerrado = interesse.status === 'encerrado';
 
   return (
@@ -52,20 +50,6 @@ export function CartaoInteresse({ interesse, onAbrir, onEditar, onCancelar, onSi
         </Text>
         <Text className="text-xs text-suave dark:text-lilas-claro">Enviado em {formatarData(interesse.criadoEm)}</Text>
       </View>
-
-      {proximoStatus && (
-        <View className="gap-2 rounded-xl border border-dashed border-lilas p-3">
-          <Text className="text-xs font-semibold uppercase text-suave dark:text-lilas-claro">Simulação</Text>
-          <Pressable
-            onPress={onSimularResposta}
-            className="flex-row items-center justify-center gap-1 rounded-xl bg-creme py-2 active:opacity-70 dark:bg-roxo-claro">
-            <Ionicons name="play-forward-outline" size={18} color={cores.texto} />
-            <Text className="font-semibold text-roxo dark:text-creme">
-              {proximoStatus === 'negociando' ? 'Vendedor respondeu' : 'Encerrar negociação'}
-            </Text>
-          </Pressable>
-        </View>
-      )}
 
       <View className="flex-row gap-2">
         {!encerrado && (
