@@ -1,5 +1,4 @@
 import { router, useFocusEffect } from 'expo-router';
-import { useSQLiteContext } from 'expo-sqlite';
 import { useCallback, useState } from 'react';
 import { ActivityIndicator, FlatList, ScrollView, Text, View } from 'react-native';
 
@@ -8,7 +7,7 @@ import {
   buscarResumoInteresses,
   listarInteresses,
   type ResumoInteresses,
-} from '@/banco/interesses';
+} from '@/servicos/interesses';
 import { CartaoInteresse } from '@/componentes/CartaoInteresse';
 import { Chip } from '@/componentes/Chip';
 import { EstadoVazio } from '@/componentes/EstadoVazio';
@@ -21,7 +20,6 @@ import { mensagemDeErro } from '@/utils/formatar';
 const LISTA_STATUS = Object.keys(STATUS_INTERESSE) as StatusInteresse[];
 
 export default function TelaInteresses() {
-  const db = useSQLiteContext();
   const cores = useCores();
 
   const [interesses, setInteresses] = useState<InteresseDetalhado[]>([]);
@@ -31,14 +29,15 @@ export default function TelaInteresses() {
 
   const carregar = useCallback(async () => {
     try {
-      setInteresses(await listarInteresses(db, status));
-      setResumo(await buscarResumoInteresses(db));
-    } catch {
-      avisar('Erro', 'Não foi possível carregar seus interesses.');
+      const [lista, novoResumo] = await Promise.all([listarInteresses(status), buscarResumoInteresses()]);
+      setInteresses(lista);
+      setResumo(novoResumo);
+    } catch (erro) {
+      avisar('Erro', mensagemDeErro(erro));
     } finally {
       setCarregando(false);
     }
-  }, [db, status]);
+  }, [status]);
 
   useFocusEffect(
     useCallback(() => {
@@ -50,9 +49,9 @@ export default function TelaInteresses() {
     const proximo = PROXIMO_STATUS[interesse.status];
     if (!proximo) return;
     try {
-      await atualizarStatusInteresse(db, interesse.id, proximo);
+      await atualizarStatusInteresse(interesse.id, proximo);
       await carregar();
-      avisar('Simulação', `${interesse.vendedorNome} mudou o status para "${STATUS_INTERESSE[proximo]}".`);
+      avisar('Simulação', `${interesse.vendedorNome ?? 'O vendedor'} mudou o status para "${STATUS_INTERESSE[proximo]}".`);
     } catch (erro) {
       avisar('Erro', mensagemDeErro(erro));
     }
@@ -90,7 +89,7 @@ export default function TelaInteresses() {
             interesse={item}
             onAbrir={() => router.push(`/produto/${item.produtoId}`)}
             onEditar={() => router.push({ pathname: '/interesse/formulario', params: { id: item.id } })}
-            onCancelar={() => cancelarInteresse(db, item.id, item.produtoTitulo, carregar)}
+            onCancelar={() => cancelarInteresse(item.id, item.produtoTitulo, carregar)}
             onSimularResposta={() => simularResposta(item)}
           />
         )}

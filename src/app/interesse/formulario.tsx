@@ -1,11 +1,8 @@
 import { router, Stack, useLocalSearchParams } from 'expo-router';
-import { useSQLiteContext } from 'expo-sqlite';
 import { useEffect, useState, type ReactNode } from 'react';
 import { ScrollView, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { atualizarInteresse, buscarInteresse, criarInteresse, type DadosInteresse } from '@/banco/interesses';
-import { buscarProduto } from '@/banco/produtos';
 import { Botao } from '@/componentes/Botao';
 import { Campo } from '@/componentes/Campo';
 import { Carregando } from '@/componentes/Carregando';
@@ -13,6 +10,8 @@ import { Cartao } from '@/componentes/Cartao';
 import { Chip } from '@/componentes/Chip';
 import { IconeProduto } from '@/componentes/IconeProduto';
 import { TIPOS_INTERESSE, type ProdutoDetalhado, type TipoInteresse } from '@/modelos';
+import { atualizarInteresse, buscarInteresse, criarInteresse, type DadosInteresse } from '@/servicos/interesses';
+import { buscarProduto } from '@/servicos/produtos';
 import { avisar } from '@/utils/alertas';
 import { formatarPreco, mensagemDeErro, precoParaTexto, textoParaPreco } from '@/utils/formatar';
 import { temErros, validarInteresse, type Erros, type FormularioInteresse } from '@/utils/validacao';
@@ -22,7 +21,6 @@ const LISTA_TIPOS = Object.keys(TIPOS_INTERESSE) as TipoInteresse[];
 export default function TelaFormularioInteresse() {
   const { id, produtoId } = useLocalSearchParams<{ id?: string; produtoId?: string }>();
   const editando = Boolean(id);
-  const db = useSQLiteContext();
   const insets = useSafeAreaInsets();
 
   const [produto, setProduto] = useState<ProdutoDetalhado | null>(null);
@@ -41,25 +39,25 @@ export default function TelaFormularioInteresse() {
     async function carregar() {
       try {
         if (id) {
-          const interesse = await buscarInteresse(db, Number(id));
+          const interesse = await buscarInteresse(Number(id));
           if (interesse) {
             setTipo(interesse.tipo);
             setValorOferecido(interesse.valorOferecido === null ? '' : precoParaTexto(interesse.valorOferecido));
             setItemTroca(interesse.itemTroca);
             setMensagem(interesse.mensagem);
-            setProduto(await buscarProduto(db, interesse.produtoId));
+            setProduto(await buscarProduto(interesse.produtoId));
           }
         } else if (produtoId) {
-          setProduto(await buscarProduto(db, Number(produtoId)));
+          setProduto(await buscarProduto(Number(produtoId)));
         }
-      } catch {
-        avisar('Erro', 'Não foi possível carregar os dados do formulário.');
+      } catch (erro) {
+        avisar('Erro', mensagemDeErro(erro));
       } finally {
         setCarregando(false);
       }
     }
     carregar();
-  }, [db, id, produtoId]);
+  }, [id, produtoId]);
 
   async function salvar() {
     setTentouSalvar(true);
@@ -79,16 +77,16 @@ export default function TelaFormularioInteresse() {
       };
 
       if (id) {
-        await atualizarInteresse(db, Number(id), dados);
+        await atualizarInteresse(Number(id), dados);
       } else {
-        await criarInteresse(db, produto.id, dados);
+        await criarInteresse(produto.id, dados);
       }
       router.back();
       avisar(
         editando ? 'Sucesso' : 'Interesse enviado!',
         editando
           ? 'Interesse atualizado!'
-          : `${produto.vendedorNome} vai receber sua proposta. Contato do vendedor: ${produto.vendedorTelefone}.`
+          : `${produto.vendedorNome ?? 'O vendedor'} vai receber sua proposta. Acompanhe na aba Interesses.`
       );
     } catch (erro) {
       avisar('Erro ao salvar', mensagemDeErro(erro));
@@ -110,11 +108,11 @@ export default function TelaFormularioInteresse() {
       {produto && (
         <Cartao>
           <View className="flex-row items-center gap-3">
-            <IconeProduto largura={64} altura={64} />
+            <IconeProduto largura={64} altura={64} imagem={produto.imagens[0]} />
             <View className="flex-1">
               <Text className="text-base font-bold text-roxo dark:text-creme">{produto.titulo}</Text>
               <Text className="text-sm text-suave dark:text-lilas-claro">
-                {formatarPreco(produto.preco)} · {produto.vendedorNome}
+                {formatarPreco(produto.preco)} · {produto.vendedorNome ?? produto.categoriaNome}
               </Text>
             </View>
           </View>

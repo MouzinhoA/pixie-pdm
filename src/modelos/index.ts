@@ -4,7 +4,7 @@ export interface Categoria {
 }
 
 export type Condicao = 'lacrado' | 'novo' | 'usado' | 'com_avarias';
-export type StatusProduto = 'disponivel' | 'reservado' | 'vendido';
+export type StatusProduto = 'disponivel' | 'pausado' | 'vendido';
 
 export interface Produto {
   id: number;
@@ -14,30 +14,29 @@ export interface Produto {
   condicao: Condicao;
   status: StatusProduto;
   categoriaId: number;
-  vendedorId: number;
-  criadoEm: string; 
+  vendedorId: string | null;
+  marca: string | null;
+  quantidade: number;
+  imagens: string[];
+  criadoEm: string;
 }
 
 export interface ProdutoDetalhado extends Produto {
   categoriaNome: string;
-  vendedorNome: string;
-  vendedorCidade: string;
-  vendedorTelefone: string;
-  vendedorReputacao: number;
-  interesseId: number | null; 
+  vendedorNome: string | null;
+  interesseId: number | null;
 }
 
 export type TipoInteresse = 'compra' | 'troca';
 export type StatusInteresse = 'aguardando' | 'negociando' | 'encerrado';
 
-
 export interface Interesse {
   id: number;
   produtoId: number;
   tipo: TipoInteresse;
-  valorOferecido: number | null; 
-  itemTroca: string; 
-  mensagem: string; 
+  valorOferecido: number | null;
+  itemTroca: string;
+  mensagem: string;
   status: StatusInteresse;
   criadoEm: string;
 }
@@ -45,9 +44,9 @@ export interface Interesse {
 export interface InteresseDetalhado extends Interesse {
   produtoTitulo: string;
   produtoPreco: number;
+  produtoImagem: string | null;
   categoriaNome: string;
-  vendedorNome: string;
-  vendedorTelefone: string;
+  vendedorNome: string | null;
 }
 
 export const CONDICOES: Record<Condicao, string> = {
@@ -59,7 +58,7 @@ export const CONDICOES: Record<Condicao, string> = {
 
 export const STATUS_PRODUTO: Record<StatusProduto, string> = {
   disponivel: 'Disponível',
-  reservado: 'Reservado',
+  pausado: 'Pausado',
   vendido: 'Vendido',
 };
 

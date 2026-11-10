@@ -13,7 +13,7 @@ const ESTILOS: Record<CorSelo, { fundo: string; texto: string }> = {
 
 export const COR_STATUS_PRODUTO: Record<StatusProduto, CorSelo> = {
   disponivel: 'verde',
-  reservado: 'amarelo',
+  pausado: 'amarelo',
   vendido: 'cinza',
 };
 

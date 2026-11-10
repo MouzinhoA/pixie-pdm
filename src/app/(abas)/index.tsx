@@ -1,17 +1,17 @@
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { router, useFocusEffect } from 'expo-router';
-import { useSQLiteContext } from 'expo-sqlite';
 import { useCallback, useState } from 'react';
 import { ActivityIndicator, FlatList, ScrollView, Text, TextInput, View } from 'react-native';
 
-import { listarCategorias } from '@/banco/categorias';
-import { listarProdutos } from '@/banco/produtos';
 import { CartaoProduto } from '@/componentes/CartaoProduto';
 import { Chip } from '@/componentes/Chip';
 import { EstadoVazio } from '@/componentes/EstadoVazio';
 import type { Categoria, ProdutoDetalhado } from '@/modelos';
+import { listarCategorias } from '@/servicos/categorias';
+import { listarProdutos } from '@/servicos/produtos';
 import { useCores } from '@/tema/cores';
 import { avisar } from '@/utils/alertas';
+import { mensagemDeErro } from '@/utils/formatar';
 
 const FAIXAS_PRECO: { rotulo: string; minimo?: number; maximo?: number }[] = [
   { rotulo: 'Até R$ 100', maximo: 100 },
@@ -20,7 +20,6 @@ const FAIXAS_PRECO: { rotulo: string; minimo?: number; maximo?: number }[] = [
 ];
 
 export default function TelaExplorar() {
-  const db = useSQLiteContext();
   const cores = useCores();
 
   const [produtos, setProdutos] = useState<ProdutoDetalhado[]>([]);
@@ -38,15 +37,15 @@ export default function TelaExplorar() {
       async function carregar() {
         try {
           const [lista, listaCategorias] = await Promise.all([
-            listarProdutos(db, { busca, categoriaId, precoMinimo: faixa?.minimo, precoMaximo: faixa?.maximo }),
-            listarCategorias(db),
+            listarProdutos({ busca, categoriaId, precoMinimo: faixa?.minimo, precoMaximo: faixa?.maximo }),
+            listarCategorias(),
           ]);
           if (ativo) {
             setProdutos(lista);
             setCategorias(listaCategorias);
           }
-        } catch {
-          avisar('Erro', 'Não foi possível carregar os itens.');
+        } catch (erro) {
+          if (ativo) avisar('Erro', mensagemDeErro(erro));
         } finally {
           if (ativo) setCarregando(false);
         }
@@ -56,7 +55,7 @@ export default function TelaExplorar() {
       return () => {
         ativo = false;
       };
-    }, [db, busca, categoriaId, faixaPreco])
+    }, [busca, categoriaId, faixaPreco])
   );
 
   const filtros = (

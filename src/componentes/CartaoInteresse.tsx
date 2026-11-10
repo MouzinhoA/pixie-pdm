@@ -23,13 +23,13 @@ export function CartaoInteresse({ interesse, onAbrir, onEditar, onCancelar, onSi
   return (
     <View className="gap-3 rounded-2xl bg-white p-3 dark:bg-roxo">
       <Pressable onPress={onAbrir} className="flex-row gap-3 active:opacity-80">
-        <IconeProduto largura={72} altura={72} />
+        <IconeProduto largura={72} altura={72} imagem={interesse.produtoImagem} />
         <View className="flex-1 gap-1">
           <Text numberOfLines={2} className="text-base font-bold text-roxo dark:text-creme">
             {interesse.produtoTitulo}
           </Text>
           <Text className="text-xs text-suave dark:text-lilas-claro">
-            {interesse.vendedorNome} · {formatarPreco(interesse.produtoPreco)}
+            {interesse.vendedorNome ?? interesse.categoriaNome} · {formatarPreco(interesse.produtoPreco)}
           </Text>
           <View className="flex-row flex-wrap gap-2">
             <Selo texto={STATUS_INTERESSE[interesse.status]} cor={COR_STATUS_INTERESSE[interesse.status]} />
