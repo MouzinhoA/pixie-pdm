@@ -75,17 +75,20 @@ export default function TelaExplorar() {
         )}
       </View>
 
-      <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerClassName="gap-2">
-        <Chip rotulo="Todas" selecionado={categoriaId === null} onPress={() => setCategoriaId(null)} />
-        {categorias.map((categoria) => (
-          <Chip
-            key={categoria.id}
-            rotulo={categoria.nome}
-            selecionado={categoriaId === categoria.id}
-            onPress={() => setCategoriaId(categoria.id)}
-          />
-        ))}
-      </ScrollView>
+      <FlatList
+        horizontal
+        data={categorias}
+        keyExtractor={(categoria) => String(categoria.id)}
+        extraData={categoriaId}
+        renderItem={({ item }) => (
+          <Chip rotulo={item.nome} selecionado={categoriaId === item.id} onPress={() => setCategoriaId(item.id)} />
+        )}
+        ListHeaderComponent={
+          <Chip rotulo="Todas" selecionado={categoriaId === null} onPress={() => setCategoriaId(null)} />
+        }
+        showsHorizontalScrollIndicator={false}
+        contentContainerClassName="gap-2"
+      />
 
       <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerClassName="items-center gap-2">
         <Ionicons name="pricetag-outline" size={18} color={cores.textoSuave} />
