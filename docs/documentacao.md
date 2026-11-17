@@ -28,9 +28,9 @@ Um produto pode receber interesses de **vários compradores**, mas cada comprado
 | Classe / tabela | Campos | Observações |
 | --- | --- | --- |
 | **Interesse** (principal) — `interesses` | id, produtoId, compradorId, tipo, valorOferecido, itemTroca, mensagem, status, criadoEm | `tipo`: compra ou troca. `status`: aguardando resposta, em negociação ou encerrado. `UNIQUE (produto_id, comprador_id)`: um interesse por comprador em cada produto. |
-| **Produto** — `produtos` | id, titulo, descricao, preco, condicao, status, categoriaId, vendedorId, marca, quantidade, imagens, criadoEm | Cadastrado pelo vendedor no Pixie Seller. `condicao` (conservação): lacrado, novo, usado ou com avarias. `status`: disponível, pausado ou vendido. |
+| **Produto** — `produtos` | id, titulo, descricao, preco, condicao, status, categoriaId, vendedorId, marca, quantidade, imagens, criadoEm | Cadastrado pelo vendedor no Pixie Seller. `condicao` (conservação): lacrado, novo, usado ou com avarias. `status`: rascunho, disponível, pausado ou vendido. |
 | **Comprador** — `comprador` | id, nome, cpf, email, criadoEm | Criado automaticamente quando a pessoa se cadastra pelo app. O `id` é o mesmo do usuário do Supabase Auth. |
-| **Vendedor** — `vendedor` | id, nome, cpf, email | Cadastrado pelo Pixie Seller. O app lê só `id` e `nome` pela view `vendedor_publico`, sem expor CPF e e-mail. |
+| **Vendedor** — `vendedor` | id, nome, cpf | Cadastrado pelo Pixie Seller. O app lê só `id` e `nome` pela view `vendedor_publico`, sem expor os dados pessoais do vendedor. |
 | **Categoria** — `categorias` | id, nome | Compartilhadas com o Pixie Seller. |
 
 **Regras de negócio**

@@ -37,7 +37,7 @@ Os dados ficam na nuvem, no **Supabase**, o mesmo banco usado pelo **Pixie Selle
 
 ## Tecnologias
 
-- [React Native](https://reactnative.dev) + [Expo SDK 57](https://docs.expo.dev)
+- [React Native](https://reactnative.dev) + [Expo SDK 58](https://docs.expo.dev)
 - [Expo Router](https://docs.expo.dev/router/introduction/) — navegação por arquivos
 - [Supabase](https://supabase.com) (`@supabase/supabase-js`) — banco de dados e login
 - [expo-sqlite](https://docs.expo.dev/versions/latest/sdk/sqlite/) — guarda a sessão de login e o tema no aparelho (`localStorage`)
@@ -47,7 +47,7 @@ Os dados ficam na nuvem, no **Supabase**, o mesmo banco usado pelo **Pixie Selle
 
 ## Como executar
 
-Pré-requisitos: [Node.js](https://nodejs.org) 20+ e o app **Expo Go** no celular Android (ou um emulador Android).
+Pré-requisitos: [Node.js](https://nodejs.org) 22.13 ou mais recente (versão par, como 22 ou 24) e o app **Expo Go** atualizado para o SDK 58 no celular Android (ou um emulador Android).
 
 ### 1. Instalar
 
@@ -86,7 +86,7 @@ npx tsc --noEmit   # verifica os tipos
 
 ## Banco de dados
 
-O banco é compartilhado com o Pixie Seller. As tabelas `categorias`, `produtos` e `vendedor` são do Pixie Seller; o script deste projeto cria só o que o comprador precisa:
+O banco é compartilhado com o Pixie Seller. As tabelas `categorias`, `produtos` e `vendedor` são do Pixie Seller; as tabelas `comprador` e `interesses` e a view `vendedor_publico` foram criadas para o comprador:
 
 | Tabela | Conteúdo |
 | --- | --- |
@@ -116,7 +116,7 @@ src/
 ├── modelos/          # Tipos das classes do modelo de negócio
 ├── tema/             # Cores da marca e tema claro/escuro
 └── utils/            # Formatação, validação e alertas
-supabase/             # Script SQL das tabelas do comprador
+docs/                 # Documentação do projeto e capturas de tela
 ```
 
 As telas nunca acessam o banco diretamente: elas chamam funções da pasta `servicos/` (ex.: `criarInteresse(produtoId, dados)`), e as regras de validação ficam em `utils/validacao.ts`.
@@ -133,5 +133,5 @@ As configurações abaixo seguem a documentação oficial das bibliotecas:
 
 - Supabase com Expo (cliente, sessão no `localStorage` e renovação do login): https://docs.expo.dev/guides/using-supabase/
 - NativeWind com Expo (`babel.config.js`, `metro.config.js`, `tailwind.config.js`): https://www.nativewind.dev/docs/getting-started/installation
-- expo-sqlite, incluindo a configuração para web (`metro.config.js`): https://docs.expo.dev/versions/v57.0.0/sdk/sqlite/
+- expo-sqlite, incluindo a configuração para web (`metro.config.js`): https://docs.expo.dev/versions/v58.0.0/sdk/sqlite/
 - Expo Router (abas, pilha de telas e rotas protegidas): https://docs.expo.dev/router/introduction/
