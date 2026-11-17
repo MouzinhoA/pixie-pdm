@@ -12,6 +12,8 @@ Os dados ficam na nuvem, no **Supabase**, o mesmo banco usado pelo **Pixie Selle
 
 > Demonstrar interesse não é comprar: o item continua sendo um anúncio do vendedor. O interesse registra a proposta do comprador.
 
+📄 A documentação do projeto (tema, modelo de dados, regras de negócio e justificativa da persistência) está em [docs/documentacao.md](docs/documentacao.md).
+
 ## Funcionalidades
 
 | Requisito | Onde está no app |
