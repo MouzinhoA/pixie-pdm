@@ -1,5 +1,5 @@
 import { forwardRef, useState } from 'react';
-import { Text, TextInput, View, type TextInputProps } from 'react-native';
+import { Text, TextInput, View, type TextInputInstance, type TextInputProps } from 'react-native';
 
 import { useCores } from '@/tema/cores';
 
@@ -8,8 +8,7 @@ interface CampoProps extends TextInputProps {
   erro?: string;
 }
 
-// forwardRef deixa a tela focar o campo (ex.: pular para o próximo ao apertar "próximo" no teclado)
-export const Campo = forwardRef<TextInput, CampoProps>(function Campo(
+export const Campo = forwardRef<TextInputInstance, CampoProps>(function Campo(
   { rotulo, erro, multiline, onFocus, onBlur, ...props },
   ref
 ) {

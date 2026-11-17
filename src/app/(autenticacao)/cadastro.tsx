@@ -1,5 +1,5 @@
 import { useRef, useState } from 'react';
-import type { TextInput } from 'react-native';
+import type { TextInputInstance } from 'react-native';
 
 import { TelaAutenticacao } from '@/componentes/Autenticacao';
 import { Botao } from '@/componentes/Botao';
@@ -19,11 +19,11 @@ export default function TelaCadastro() {
   const [mensagemErro, setMensagemErro] = useState<string | null>(null);
   const [cadastrando, setCadastrando] = useState(false);
 
-  const campoNome = useRef<TextInput>(null);
-  const campoCpf = useRef<TextInput>(null);
-  const campoEmail = useRef<TextInput>(null);
-  const campoSenha = useRef<TextInput>(null);
-  const campoConfirmarSenha = useRef<TextInput>(null);
+  const campoNome = useRef<TextInputInstance>(null);
+  const campoCpf = useRef<TextInputInstance>(null);
+  const campoEmail = useRef<TextInputInstance>(null);
+  const campoSenha = useRef<TextInputInstance>(null);
+  const campoConfirmarSenha = useRef<TextInputInstance>(null);
 
   function alterar(campo: NomeCampo, valor: string) {
     setValores((atuais) => ({ ...atuais, [campo]: valor }));

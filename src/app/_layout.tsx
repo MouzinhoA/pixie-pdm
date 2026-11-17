@@ -26,13 +26,13 @@ export default function LayoutRaiz() {
     <ThemeProvider value={temaNavegacao}>
       <StatusBar style="auto" />
       <Stack screenOptions={{ headerTitleStyle: { fontWeight: 'bold' }, headerBackButtonDisplayMode: 'minimal' }}>
-        <Stack.Protected guard={logado}>
+        <Stack.Protected guard={logado} redirectTo="/login">
           <Stack.Screen name="(abas)" options={{ headerShown: false }} />
           <Stack.Screen name="produto/[id]" options={{ title: 'Detalhes do item' }} />
           <Stack.Screen name="interesse/formulario" options={{ title: 'Interesse' }} />
         </Stack.Protected>
 
-        <Stack.Protected guard={!logado}>
+        <Stack.Protected guard={!logado} redirectTo="/">
           <Stack.Screen name="(autenticacao)" options={{ headerShown: false }} />
         </Stack.Protected>
       </Stack>

@@ -1,5 +1,5 @@
 import { useRef, useState } from 'react';
-import type { TextInput } from 'react-native';
+import type { TextInputInstance } from 'react-native';
 
 import { TelaAutenticacao } from '@/componentes/Autenticacao';
 import { Botao } from '@/componentes/Botao';
@@ -12,7 +12,7 @@ export default function TelaLogin() {
   const [senha, setSenha] = useState('');
   const [mensagemErro, setMensagemErro] = useState<string | null>(null);
   const [entrando, setEntrando] = useState(false);
-  const campoSenha = useRef<TextInput>(null);
+  const campoSenha = useRef<TextInputInstance>(null);
 
   async function enviar() {
     if (!email.trim() || !senha) {

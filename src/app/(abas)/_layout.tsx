@@ -39,7 +39,7 @@ export default function LayoutAbas() {
         options={{
           title: 'Explorar',
           headerTitle: () => <Logo />,
-          tabBarIcon: ({ color, size }) => <Ionicons name="search" color={color} size={size} />,
+          tabBarIcon: ({ color, size }) => <Ionicons name="search" color={color as string} size={size} />,
         }}
       />
       <Tabs.Screen
@@ -47,7 +47,7 @@ export default function LayoutAbas() {
         options={{
           title: 'Meus interesses',
           tabBarLabel: 'Interesses',
-          tabBarIcon: ({ color, size }) => <Ionicons name="chatbubbles-outline" color={color} size={size} />,
+          tabBarIcon: ({ color, size }) => <Ionicons name="chatbubbles-outline" color={color as string} size={size} />,
         }}
       />
     </Tabs>
