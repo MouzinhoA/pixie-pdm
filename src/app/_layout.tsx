@@ -30,6 +30,7 @@ export default function LayoutRaiz() {
           <Stack.Screen name="(abas)" options={{ headerShown: false }} />
           <Stack.Screen name="produto/[id]" options={{ title: 'Detalhes do item' }} />
           <Stack.Screen name="interesse/formulario" options={{ title: 'Interesse' }} />
+          <Stack.Screen name="interesse/chat" options={{ title: 'Conversa' }} />
         </Stack.Protected>
 
         <Stack.Protected guard={!logado} redirectTo="/">

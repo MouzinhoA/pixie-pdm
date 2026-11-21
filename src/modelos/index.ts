@@ -72,3 +72,11 @@ export const STATUS_INTERESSE: Record<StatusInteresse, string> = {
   negociando: 'Em negociação',
   encerrado: 'Encerrado',
 };
+
+export interface Mensagem {
+  id: number;
+  interesseId: number;
+  autorId: string;
+  conteudo: string;
+  criadoEm: string;
+}

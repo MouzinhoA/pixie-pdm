@@ -9,14 +9,16 @@ import { formatarData, formatarPreco } from '@/utils/formatar';
 
 interface CartaoInteresseProps {
   interesse: InteresseDetalhado;
-  onAbrir: () => void; 
+  onAbrir: () => void;
+  onConversar: () => void;
   onEditar: () => void;
   onCancelar: () => void;
 }
 
-export function CartaoInteresse({ interesse, onAbrir, onEditar, onCancelar }: CartaoInteresseProps) {
+export function CartaoInteresse({ interesse, onAbrir, onConversar, onEditar, onCancelar }: CartaoInteresseProps) {
   const cores = useCores();
   const encerrado = interesse.status === 'encerrado';
+  const temConversa = interesse.status !== 'aguardando';
 
   return (
     <View className="gap-3 rounded-2xl bg-white p-3 dark:bg-roxo">
@@ -50,6 +52,15 @@ export function CartaoInteresse({ interesse, onAbrir, onEditar, onCancelar }: Ca
         </Text>
         <Text className="text-xs text-suave dark:text-lilas-claro">Enviado em {formatarData(interesse.criadoEm)}</Text>
       </View>
+
+      {temConversa && (
+        <Pressable
+          onPress={onConversar}
+          className="flex-row items-center justify-center gap-1 rounded-xl bg-roxo py-2 active:opacity-80 dark:bg-lilas">
+          <Ionicons name="chatbubble-ellipses-outline" size={18} color={cores.fundo} />
+          <Text className="font-semibold text-creme dark:text-roxo">{encerrado ? 'Ver conversa' : 'Conversar'}</Text>
+        </Pressable>
+      )}
 
       <View className="flex-row gap-2">
         {!encerrado && (

@@ -71,6 +71,7 @@ export default function TelaInteresses() {
           <CartaoInteresse
             interesse={item}
             onAbrir={() => router.push(`/produto/${item.produtoId}`)}
+            onConversar={() => router.push({ pathname: '/interesse/chat', params: { id: item.id } })}
             onEditar={() => router.push({ pathname: '/interesse/formulario', params: { id: item.id } })}
             onCancelar={() => cancelarInteresse(item.id, item.produtoTitulo, carregar)}
           />

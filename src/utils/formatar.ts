@@ -35,3 +35,13 @@ export function formatarCpf(texto: string) {
     .replace(/(\d{3})(\d)/, '$1.$2')
     .replace(/(\d{3})(\d{1,2})$/, '$1-$2');
 }
+
+// "2026-10-17T15:30:00.000Z" -> "17/10, 12:30"
+export function formatarDataHora(dataIso: string) {
+  return new Date(dataIso).toLocaleString('pt-BR', {
+    day: '2-digit',
+    month: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+  });
+}
