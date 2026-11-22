@@ -75,7 +75,7 @@ async function detalhar(linhas: LinhaProduto[]): Promise<ProdutoDetalhado[]> {
 }
 
 export async function listarProdutos(filtros: FiltrosProduto = {}) {
-  let consulta = supabase.from('produtos').select(COLUNAS_PRODUTO).neq('status', 'pausado');
+  let consulta = supabase.from('produtos').select(COLUNAS_PRODUTO).in('status', ['disponivel', 'vendido']);
 
   const busca = filtros.busca?.trim();
   if (busca) consulta = consulta.ilike('titulo', `%${busca}%`);

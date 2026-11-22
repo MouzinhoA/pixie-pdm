@@ -4,7 +4,7 @@ export interface Categoria {
 }
 
 export type Condicao = 'lacrado' | 'novo' | 'usado' | 'com_avarias';
-export type StatusProduto = 'disponivel' | 'pausado' | 'vendido';
+export type StatusProduto = 'rascunho' | 'disponivel' | 'pausado' | 'vendido';
 
 export interface Produto {
   id: number;
@@ -57,6 +57,7 @@ export const CONDICOES: Record<Condicao, string> = {
 };
 
 export const STATUS_PRODUTO: Record<StatusProduto, string> = {
+  rascunho: 'Rascunho',
   disponivel: 'Disponível',
   pausado: 'Pausado',
   vendido: 'Vendido',
