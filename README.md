@@ -22,16 +22,19 @@ Os dados ficam na nuvem, no **Supabase**, o mesmo banco usado pelo **Pixie Selle
 | **RF02 — Persistência** | Banco **Supabase** (PostgreSQL na nuvem): interesses, itens e categorias ficam salvos na conta do usuário. O login e a preferência de tema ficam salvos no aparelho. |
 | **RF03 — Listagem inteligente** | Explorar: busca por título, filtro por categoria e por faixa de preço. Interesses: filtro por status da negociação. |
 | **RF04 — Validação** | Interesse: tipo (comprar/trocar) e mensagem obrigatórios; valor oferecido com formato validado; item da troca obrigatório quando o tipo é troca. Cadastro: nome, CPF (com dígitos verificadores), e-mail, senha com no mínimo 6 caracteres e confirmação de senha. Os erros aparecem embaixo de cada campo e somem quando o campo é corrigido. |
-| **RF05 — Navegação** | Expo Router: telas de login e cadastro, abas Explorar e Interesses, tela de detalhe do item e formulário de interesse. Sem login, o app abre na tela de login. |
+| **RF05 — Navegação** | Expo Router: telas de login e cadastro, abas Explorar e Interesses, tela de detalhe do item, formulário de interesse e conversa com o vendedor. Sem login, o app abre na tela de login. |
 | **RF06 — Feedback** | Confirmação antes de cancelar e de sair da conta, mensagens de sucesso e erro em português, indicadores de carregamento. |
 
 **Conta:** cadastro de comprador (nome, CPF, e-mail e senha), login e botão de sair no topo das abas.
 
 **Detalhe do item:** foto, preço, categoria, marca/fabricante, conservação, quantidade, data do anúncio, descrição, nome do vendedor e o espaço **Demonstrar interesse**. Os rótulos seguem os do Pixie Seller.
 
-**Explorar:** mostra os anúncios disponíveis e vendidos. Os anúncios **pausados** pelo vendedor não aparecem para o comprador.
+**Explorar:** mostra os anúncios disponíveis e vendidos. Os anúncios em **rascunho** ou **pausados** pelo vendedor não aparecem para o comprador.
+
+**Conversa:** quando o vendedor aceita a proposta (status "Em negociação"), o botão **Conversar** aparece no cartão do interesse. As mensagens chegam em tempo real (Supabase Realtime) e são as mesmas que o vendedor vê no Pixie Seller. Depois que o interesse é encerrado, a conversa fica só para leitura.
 
 **Extras (pontuação bônus):**
+- Chat em tempo real com o vendedor
 - Tema claro / escuro (botão no topo, salvo no aparelho)
 - Estatísticas: total de interesses, quantos para comprar, para trocar e em negociação
 
@@ -86,7 +89,7 @@ npx tsc --noEmit   # verifica os tipos
 
 ## Banco de dados
 
-O banco é compartilhado com o Pixie Seller. As tabelas `categorias`, `produtos` e `vendedor` são do Pixie Seller; as tabelas `comprador` e `interesses` e a view `vendedor_publico` foram criadas para o comprador:
+O banco é compartilhado com o Pixie Seller. As tabelas `categorias`, `produtos` e `vendedor` são do Pixie Seller; as tabelas `comprador`, `interesses` e `mensagens` e a view `vendedor_publico` foram criadas para o comprador:
 
 | Tabela | Conteúdo |
 | --- | --- |
@@ -95,9 +98,10 @@ O banco é compartilhado com o Pixie Seller. As tabelas `categorias`, `produtos`
 | `vendedor` | Perfil do vendedor (Pixie Seller) |
 | `comprador` | Perfil do comprador, criado automaticamente no cadastro |
 | `interesses` | Propostas de compra ou troca do comprador em um produto |
+| `mensagens` | Conversa entre comprador e vendedor sobre um interesse |
 | `vendedor_publico` | View com só o `id` e o `nome` do vendedor, para mostrar no anúncio sem expor CPF e e-mail |
 
-As regras de acesso (RLS) garantem que cada comprador só vê, edita e cancela os próprios interesses.
+As regras de acesso (RLS) garantem que cada comprador só vê, edita e cancela os próprios interesses, e só lê e envia mensagens nas próprias conversas.
 
 A primeira versão do app guardava os dados em um banco SQLite local, que foi substituído pelo Supabase. Hoje o SQLite só serve de base para o `localStorage` do aparelho, onde ficam a sessão de login e o tema.
 
@@ -109,8 +113,8 @@ src/
 │   ├── (autenticacao)/ # Login e cadastro
 │   ├── (abas)/       # Explorar e Meus interesses
 │   ├── produto/      # [id] = detalhes do item
-│   └── interesse/    # formulario = demonstrar/editar interesse
-├── servicos/         # Acesso ao Supabase: login, produtos, categorias, interesses
+│   └── interesse/    # formulario = demonstrar/editar interesse; chat = conversa com o vendedor
+├── servicos/         # Acesso ao Supabase (login, produtos, categorias, interesses, chat) e preferências do aparelho
 ├── componentes/      # Componentes visuais reutilizáveis
 ├── modelos/          # Tipos das classes do modelo de negócio
 ├── tema/             # Cores da marca e tema claro/escuro

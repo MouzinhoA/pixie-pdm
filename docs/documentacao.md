@@ -7,7 +7,7 @@
 
 O **Pixie** é um marketplace de **artigos colecionáveis** (cartas, action figures, moedas, quadrinhos, discos de vinil). O modelo de negócio parte de um problema real: faltam plataformas especializadas para quem coleciona.
 
-Este app é a versão do **comprador**. Ele cria uma conta, explora os itens anunciados pelos vendedores, consulta os detalhes e **demonstra interesse** em comprar ou trocar: envia uma proposta (valor oferecido ou item para troca) e uma mensagem ao vendedor, e acompanha o status da negociação.
+Este app é a versão do **comprador**. Ele cria uma conta, explora os itens anunciados pelos vendedores, consulta os detalhes e **demonstra interesse** em comprar ou trocar: envia uma proposta (valor oferecido ou item para troca) e uma mensagem ao vendedor, e acompanha o status da negociação. Quando o vendedor aceita a proposta, os dois conversam por um **chat em tempo real**.
 
 Os vendedores usam o **Pixie Seller**, o projeto web da disciplina DAW III. Os dois sistemas compartilham o mesmo banco no Supabase. Um anúncio cadastrado no Pixie Seller aparece no app, e o interesse enviado pelo app chega ao vendedor no Pixie Seller.
 
@@ -21,6 +21,7 @@ erDiagram
     CATEGORIA ||--o{ PRODUTO : "classifica"
     PRODUTO ||--o{ INTERESSE : "recebe"
     COMPRADOR ||--o{ INTERESSE : "demonstra"
+    INTERESSE ||--o{ MENSAGEM : "tem"
 ```
 
 Um produto pode receber interesses de **vários compradores**, mas cada comprador tem **no máximo um interesse por produto**.
@@ -32,17 +33,19 @@ Um produto pode receber interesses de **vários compradores**, mas cada comprado
 | **Comprador** — `comprador` | id, nome, cpf, email, criadoEm | Criado automaticamente quando a pessoa se cadastra pelo app. O `id` é o mesmo do usuário do Supabase Auth. |
 | **Vendedor** — `vendedor` | id, nome, cpf | Cadastrado pelo Pixie Seller. O app lê só `id` e `nome` pela view `vendedor_publico`, sem expor os dados pessoais do vendedor. |
 | **Categoria** — `categorias` | id, nome | Compartilhadas com o Pixie Seller. |
+| **Mensagem** — `mensagens` | id, interesseId, autorId, conteudo, criadoEm | Conversa entre o comprador e o vendedor de um interesse. O `autorId` é preenchido pelo banco com o usuário logado. `conteudo`: 1 a 1000 caracteres. |
 
 **Regras de negócio**
 
 - Cada comprador pode demonstrar um interesse por item. Para mudar a proposta, ele edita o interesse que já existe.
 - Tipo e mensagem (10 a 300 caracteres) são obrigatórios.
 - Na compra, o valor oferecido é opcional, mas precisa ser maior que zero. Na troca, é obrigatório dizer qual item é oferecido (3 a 100 caracteres).
-- Só é possível demonstrar interesse em itens disponíveis e com quantidade em estoque. Anúncios pausados pelo vendedor não aparecem no app.
+- Só é possível demonstrar interesse em itens disponíveis e com quantidade em estoque. Anúncios em rascunho ou pausados pelo vendedor não aparecem no app.
 - O comprador não altera o status do interesse. Quem aceita a proposta (em negociação) ou encerra é o vendedor, pelo Pixie Seller.
+- O chat só existe depois que o vendedor aceita a proposta. Mensagens só podem ser enviadas enquanto o interesse está em negociação; depois de encerrado, a conversa fica só para leitura.
 - Cadastro: nome, CPF válido (com dígitos verificadores), e-mail, senha com no mínimo 6 caracteres e confirmação de senha.
 
-**Segurança:** as regras de acesso do banco (Row Level Security) garantem que cada comprador só vê, edita e cancela os próprios interesses, mesmo que alguém tente acessar a API diretamente.
+**Segurança:** as regras de acesso do banco (Row Level Security) garantem que cada comprador só vê, edita e cancela os próprios interesses, e só lê e envia mensagens nas próprias conversas, mesmo que alguém tente acessar a API diretamente.
 
 ## 3. Justificativa da persistência: Supabase (PostgreSQL)
 
