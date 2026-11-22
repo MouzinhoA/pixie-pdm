@@ -99,7 +99,7 @@ O banco é compartilhado com o Pixie Seller. As tabelas `categorias`, `produtos`
 
 As regras de acesso (RLS) garantem que cada comprador só vê, edita e cancela os próprios interesses.
 
-A estrutura do banco SQLite usado na primeira versão do app continua em `src/banco/banco.ts`, mas não é mais usada.
+A primeira versão do app guardava os dados em um banco SQLite local, que foi substituído pelo Supabase. Hoje o SQLite só serve de base para o `localStorage` do aparelho, onde ficam a sessão de login e o tema.
 
 ## Estrutura do projeto
 
@@ -111,7 +111,6 @@ src/
 │   ├── produto/      # [id] = detalhes do item
 │   └── interesse/    # formulario = demonstrar/editar interesse
 ├── servicos/         # Acesso ao Supabase: login, produtos, categorias, interesses
-├── banco/            # Estrutura do SQLite da primeira versão (sem uso)
 ├── componentes/      # Componentes visuais reutilizáveis
 ├── modelos/          # Tipos das classes do modelo de negócio
 ├── tema/             # Cores da marca e tema claro/escuro
