@@ -8,7 +8,6 @@ export const paleta = {
   creme: '#FCF2E8',
   lilas: '#D19FFC',
   suave: '#6B6497',
-  estrela: '#F2B705',
 };
 
 const claro = {
