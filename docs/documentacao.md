@@ -59,6 +59,9 @@ A primeira versão do app usava SQLite (`expo-sqlite`), com dados de exemplo no 
 
 ## 4. Capturas de tela
 
-| Explorar (busca e filtros) | Detalhe | Formulário (validação) | Interesses | Tema escuro |
+| Login | Explorar (busca e filtros) | Detalhe | Interesses | Conversa |
 | --- | --- | --- | --- | --- |
-| <img src="prints/explorar.png" width="120" /> | <img src="prints/detalhe.png" width="120" /> | <img src="prints/formulario.png" width="120" /> | <img src="prints/interesses.png" width="120" /> | <img src="prints/escuro.png" width="120" /> |
+| <img src="prints/login-claro.jpeg" width="120" /> | <img src="prints/explorar-claro.jpeg" width="120" /> | <img src="prints/detalhe-claro.jpeg" width="120" /> | <img src="prints/interesses-claro.jpeg" width="120" /> | <img src="prints/chat-claro.jpeg" width="120" /> |
+| <img src="prints/login-escuro.jpeg" width="120" /> | <img src="prints/explorar-escuro.jpeg" width="120" /> | <img src="prints/detalhe-escuro.jpeg" width="120" /> | <img src="prints/interesses-escuro.jpeg" width="120" /> | <img src="prints/chat-escuro.jpeg" width="120" /> |
+
+Primeira linha: tema claro. Segunda linha: tema escuro.

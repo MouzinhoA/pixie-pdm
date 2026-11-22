@@ -77,7 +77,6 @@ export async function buscarInteresse(id: number): Promise<InteresseDetalhado | 
 }
 
 export async function criarInteresse(produtoId: number, dados: DadosInteresse): Promise<number> {
-  // comprador_id é preenchido pelo banco com o usuário logado (default auth.uid())
   const { data, error } = await supabase
     .from('interesses')
     .insert({ produto_id: produtoId, ...paraBanco(dados) })

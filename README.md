@@ -126,9 +126,12 @@ As telas nunca acessam o banco diretamente: elas chamam funções da pasta `serv
 
 ## Capturas de tela
 
-| Explorar | Detalhe | Formulário (validação) | Interesses | Tema escuro |
+| Login | Explorar | Detalhe | Interesses | Conversa |
 | --- | --- | --- | --- | --- |
-| <img src="docs/prints/explorar.png" width="160" /> | <img src="docs/prints/detalhe.png" width="160" /> | <img src="docs/prints/formulario.png" width="160" /> | <img src="docs/prints/interesses.png" width="160" /> | <img src="docs/prints/escuro.png" width="160" /> |
+| <img src="docs/prints/login-claro.jpeg" width="160" /> | <img src="docs/prints/explorar-claro.jpeg" width="160" /> | <img src="docs/prints/detalhe-claro.jpeg" width="160" /> | <img src="docs/prints/interesses-claro.jpeg" width="160" /> | <img src="docs/prints/chat-claro.jpeg" width="160" /> |
+| <img src="docs/prints/login-escuro.jpeg" width="160" /> | <img src="docs/prints/explorar-escuro.jpeg" width="160" /> | <img src="docs/prints/detalhe-escuro.jpeg" width="160" /> | <img src="docs/prints/interesses-escuro.jpeg" width="160" /> | <img src="docs/prints/chat-escuro.jpeg" width="160" /> |
+
+Primeira linha: tema claro. Segunda linha: tema escuro.
 
 ## Referências
 
